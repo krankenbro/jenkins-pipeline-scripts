@@ -87,7 +87,7 @@ class Modules {
 
             // add platform dll to test installs
         def packagesDir = Utilities.getArtifactFolder(context)
-        def allModulesDir = "c:\\Builds\\Jenkins\\VCF\\modules"
+        def allModulesDir = "c:\\CICD\\Artifacts\\"
 
         context.env.xunit_virto_modules_folder = packagesDir
         context.env.xunit_virto_dependency_modules_folder = allModulesDir
