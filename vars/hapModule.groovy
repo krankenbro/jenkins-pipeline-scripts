@@ -119,19 +119,19 @@ import jobs.scripts.*
 				}				
 			}				
 
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				stage('Publish')
-				{
-					timestamps { 	
-						Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")				
-						if (Packaging.getShouldPublish(this)) {
-							processManifests(true) // publish artifacts to github releases
-						}
-						if(env.BRANCH_NAME == 'master')
-							Packaging.createNugetPackages(this)
-					}
-				}
-			}		
+			// if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+			// 	stage('Publish')
+			// 	{
+			// 		timestamps { 	
+			// 			Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")				
+			// 			if (Packaging.getShouldPublish(this)) {
+			// 				processManifests(true) // publish artifacts to github releases
+			// 			}
+			// 			if(env.BRANCH_NAME == 'master')
+			// 				Packaging.createNugetPackages(this)
+			// 		}
+			// 	}
+			// }		
 
 			stage('Cleanup') {
 				timestamps { 
