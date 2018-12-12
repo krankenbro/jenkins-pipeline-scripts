@@ -28,24 +28,16 @@ def call(body) {
 			dockerTag = "latest"
 		}
 		
-		if(projectType == null)
-		{
-			projectType = "NET4"
-		}
+		solution = "VirtoCommerce.Storefront.sln"
+		projectType = "NETCORE2"
 
-		if(solution == null)
-		{
-			 solution = 'VirtoCommerce.Platform.sln'
-		}
-		else
-		{
-			websiteDir = 'VirtoCommerce.Storefront'
-			webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
-			zipArtifact = 'VirtoCommerce.StoreFront'
-			deployScript = 'VC-Storefront2AzureDev.ps1'
-			if (env.BRANCH_NAME == 'master') {
-				deployScript = 'VC-Storefront2AzureQA.ps1'
-			}
+		
+		websiteDir = 'VirtoCommerce.Storefront'
+		webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
+		zipArtifact = 'VirtoCommerce.StoreFront'
+		deployScript = 'VC-Storefront2AzureDev.ps1'
+		if (env.BRANCH_NAME == 'master') {
+			deployScript = 'VC-Storefront2AzureQA.ps1'
 		}
 		
 		try {
@@ -53,22 +45,15 @@ def call(body) {
 
 			stage('Checkout') {
 				timestamps { 
+					if(env.BRANCH_NAME == 'master'){
+						deleteDir()
+					}
 					checkout scm
 				}				
 			}
 
-			if(Utilities.checkAndAbortBuild(this))
-			{
-				return true
-			}
-
 			stage('Build + Analyze') {		
-				timestamps { 					
-					// clean folder for a release
-					if (Packaging.getShouldPublish(this)) {
-						deleteDir()
-						checkout scm
-					}		
+				timestamps {		
 					
 					Packaging.startAnalyzer(this)
 					Packaging.runBuild(this, solution)
