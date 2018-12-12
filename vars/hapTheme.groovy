@@ -17,7 +17,6 @@ def call(body) {
 		}
 		try {
 			echo "Building branch ${env.BRANCH_NAME}"
-			Utilities.notifyBuildStatus(this, "Started")
 
 			stage('Checkout') {
 				timestamps { 
@@ -60,7 +59,6 @@ def call(body) {
 		}
 		catch (any) {
 			currentBuild.result = 'FAILURE'
-			Utilities.notifyBuildStatus(this, currentBuild.result)
 			throw any //rethrow exception to prevent the build from proceeding
 		}
 		finally {
@@ -75,8 +73,5 @@ def call(body) {
 				emailext body:mailBody, subject: "${env.JOB_NAME}:${env.BUILD_NUMBER} - ${currentBuild.currentResult}", recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
 			}
 		}
-	
-	  	step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
-		Utilities.notifyBuildStatus(this, currentBuild.result)
 	}
 }

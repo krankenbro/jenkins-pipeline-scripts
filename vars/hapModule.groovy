@@ -22,8 +22,6 @@ import jobs.scripts.*
 			dockerTag = "latest"
 		}
 		try {	
-			step([$class: 'GitHubCommitStatusSetter', contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'ci.virtocommerce.com'], statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: 'Building on Virto Commerce CI', state: 'PENDING']]]])			
-			Utilities.notifyBuildStatus(this, "started")
 
 			stage('Checkout') {
 				timestamps { 		
@@ -143,7 +141,6 @@ import jobs.scripts.*
 		}
 		catch (any) {
 			currentBuild.result = 'FAILURE'
-			Utilities.notifyBuildStatus(this, currentBuild.result)
 			throw any //rethrow exception to prevent the build from proceeding
 		}
 		finally {
@@ -160,9 +157,6 @@ import jobs.scripts.*
 			}
 			//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
 		}
-
-		step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
-		Utilities.notifyBuildStatus(this, currentBuild.result)
     }
 }
 
