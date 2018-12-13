@@ -36,7 +36,7 @@ $headers = @{}
 $headers.Add("Authorization", $headerValue)
 
 Write-Output "Replace we.config"
-docker cp /C/CICD/web.config ${platformContainer}:/vc-platform/
+docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
 Write-Output "Restarting website"
 $moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
 Start-Sleep -s 3
