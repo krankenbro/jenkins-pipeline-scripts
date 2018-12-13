@@ -1,6 +1,8 @@
 Param(  
     [parameter(Mandatory = $true)]
     $apiurl,
+    [parameter(Mandatory = $true)]
+    $platformContainer,
     $hmacAppId,
     $hmacSecret,
     $needRestart
@@ -32,6 +34,13 @@ if ($initResult.StatusCode -ne 200) {
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
+
+Write-Output "Replace we.config"
+docker cp \CICD\web.config ${platformContainer}:/vc-platform/
+Write-Output "Restarting website"
+$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
+Start-Sleep -s 3
+
 $moduleImportResult = Invoke-RestMethod $modulesInstallUrl -Method Post -Headers $headers -ErrorAction Stop
 Write-Output $moduleImportResult
 Start-Sleep -s 1
