@@ -246,7 +246,7 @@ class Packaging {
         def fullJobName = Utilities.getRepoName(context)
 
         context.withSonarQubeEnv('VC Sonar Server') {
-            context.bat "\"${sqScannerMsBuildHome}\\sonar-scanner-3.0.3.778\\bin\\sonar-scanner.bat\" scan -Dsonar.projectKey=theme_default_${context.env.BRANCH_NAME} -Dsonar.sources=./assets -Dsonar.branch=${context.env.BRANCH_NAME} -Dsonar.projectName=\"${fullJobName}\" -Dsonar.host.url=%SONAR_HOST_URL% -Dsonar.login=%SONAR_AUTH_TOKEN%"
+            context.bat "\"${sqScannerMsBuildHome}\\sonar-scanner-3.0.3.778\\bin\\sonar-scanner.bat\" scan -Dsonar.projectKey=theme_default_${context.env.BRANCH_NAME} -Dsonar.sources=./themes -Dsonar.branch=${context.env.BRANCH_NAME} -Dsonar.projectName=\"${fullJobName}\" -Dsonar.host.url=%SONAR_HOST_URL% -Dsonar.login=%SONAR_AUTH_TOKEN%"
         }
     }
 
@@ -282,7 +282,7 @@ class Packaging {
         if(bowerjs.exists()){
             context.bat "node node_modules\\bower\\bin\\bower install --force-latest"
         }
-        context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
+        context.bat "node node_modules\\gulp\\bin\\gulp.js zip"
     }    
 
     def static runUnitTests(context, tests)
