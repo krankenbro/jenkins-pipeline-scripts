@@ -50,3 +50,5 @@ do {
 }
 while (([string]::IsNullOrEmpty($notify.finished)) -and $cycleCount -lt 180)
 Start-Sleep -s 3
+Write-Output "Restarting website"
+$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
