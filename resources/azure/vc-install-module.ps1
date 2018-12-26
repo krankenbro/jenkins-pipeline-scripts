@@ -32,7 +32,7 @@ Write-Output "Replace web.config"
 docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
 docker cp C:\CICD\modules.json ${platformContainer}:/vc-platform/
 Write-Output "Restarting website"
-$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
+Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
 Start-Sleep -s 5
 
 $moduleUploadResult = Invoke-MultipartFormDataUpload -InFile $moduleZipArchievePath -Uri $moduleUploadUrl -Authorization $headerValue
@@ -45,7 +45,6 @@ $NotificationStateJson = @"
 
 $notify = @{}
 do {
-    Start-Sleep -s 3
     $state = Invoke-RestMethod "$pushUrl" -Body $NotificationStateJson -Method Post -ContentType "application/json" -Headers $headers
     Write-Output $state
     if ($state.notifyEvents -ne $null ) {
