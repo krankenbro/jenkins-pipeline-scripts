@@ -4,7 +4,8 @@ Param(
     [parameter(Mandatory = $true)]
     $moduleZipArchievePath,
     $hmacAppId,
-    $hmacSecret
+    $hmacSecret,
+    $platformContainer
 )
 
 . $PSScriptRoot\utilities.ps1
