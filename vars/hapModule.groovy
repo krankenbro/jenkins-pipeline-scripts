@@ -89,7 +89,7 @@ import jobs.scripts.*
 						Packaging.startDockerTestEnvironment(this, dockerTag)
 
 						// install modules
-						//Packaging.installModules(this, 0)
+						Packaging.installModules(this, 0)
 
                         // install module
                         Modules.installModuleArtifacts(this)
