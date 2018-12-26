@@ -47,6 +47,8 @@ $notify = @{}
 do {
     $state = Invoke-RestMethod "$pushUrl" -Body $NotificationStateJson -Method Post -ContentType "application/json" -Headers $headers
     Write-Output $state.notifyEvents
+    Write-Output $state.notifyEvents.progressLog
+    Write-Output "_____"
     if ($state.notifyEvents -ne $null ) {
         $notify = $state.notifyEvents
         if ($notify.errorCount -gt 0) {
