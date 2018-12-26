@@ -27,6 +27,13 @@ $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
 
+Write-Output "Replace web.config"
+docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
+docker cp C:\CICD\modules.json ${platformContainer}:/vc-platform/
+Write-Output "Restarting website"
+$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
+Start-Sleep -s 5
+
 $moduleUploadResult = Invoke-MultipartFormDataUpload -InFile $moduleZipArchievePath -Uri $moduleUploadUrl -Authorization $headerValue
 Write-Output $moduleUploadResult
 $moduleInstallResult = Invoke-RestMethod -Uri $moduleInstallUrl -Method Post -Headers $headers -Body $moduleUploadResult
