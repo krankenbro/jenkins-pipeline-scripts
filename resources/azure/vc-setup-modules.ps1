@@ -39,7 +39,7 @@ Write-Output "Replace web.config"
 docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
 docker cp C:\CICD\modules.zip ${platformContainer}:/vc-platform/
 docker exec $platformContainer powershell -Command "Expand-Archive -Path C:\vc-platform\modules.zip -DestinationPath C:\vc-platform\Modules\"
-docker exec $platformContainer powershell -Command "Remove-Item modules.zip -Force"
+docker exec $platformContainer powershell -Command "Remove-Item C:\vc-platform\modules.zip -Force"
 #Write-Output "Restarting website"
 #$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
 #Start-Sleep -s 3
