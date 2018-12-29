@@ -113,15 +113,10 @@ def call(body) {
 						}
 					}
 
-					if(!Utilities.isNetCore(projectType)) {
-						stage("Swagger schema validation"){
-							timestamps{
-								def tempFolder = Utilities.getTempFolder(this)
-								def schemaPath = "${tempFolder}\\swagger.json"
-
-								Utilities.validateSwagger(this, schemaPath)
-							}
-						}
+					stage('Theme build and deploy'){
+						def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
+						build(job: "../hap-theme/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
+						Packaging.installTheme(this, themePath)
 					}
 				}		
 			}
