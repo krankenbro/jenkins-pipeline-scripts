@@ -1,6 +1,8 @@
 Param(  
     [parameter(Mandatory = $true)]
     $apiurl,
+    [parameter(Mandatory = $true)]
+    $platformContainer,
     $hmacAppId,
     $hmacSecret,
     $needRestart
@@ -28,10 +30,18 @@ if ($initResult.StatusCode -ne 200) {
     throw "Can't open admin site homepage"
 }
 
-# Initiate modules installation
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
+
+Write-Output "Replace web.config & add modules.json"
+docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
+docker cp C:\CICD\modules.json ${platformContainer}:/vc-platform/
+
+Write-Output "Restarting website"
+$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
+
+# Initiate modules installation
 $moduleImportResult = Invoke-RestMethod $modulesInstallUrl -Method Post -Headers $headers -ErrorAction Stop
 Write-Output $moduleImportResult
 Start-Sleep -s 1
