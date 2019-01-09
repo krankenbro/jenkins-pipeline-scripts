@@ -1,8 +1,6 @@
 Param(  
     [parameter(Mandatory = $true)]
     $apiurl,
-    [parameter(Mandatory = $true)]
-    $platformContainer,
     $hmacAppId,
     $hmacSecret,
     $needRestart
@@ -34,15 +32,53 @@ if ($initResult.StatusCode -ne 200) {
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
+$moduleImportResult = Invoke-RestMethod $modulesInstallUrl -Method Post -Headers $headers -ErrorAction Stop
+Write-Output $moduleImportResult
+Start-Sleep -s 1
 
-Write-Output "Replace web.config"
-docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
-docker cp C:\CICD\modules.json ${platformContainer}:/vc-platform/
-docker cp C:\CICD\modules.zip ${platformContainer}:/vc-platform/
-docker exec $platformContainer powershell -Command "Expand-Archive -Path C:\vc-platform\modules.zip -DestinationPath C:\vc-platform\Modules"
-docker exec $platformContainer powershell -Command "Remove-Item C:\vc-platform\modules.zip -Force"
+# save notification id, so we can get status of the operation
+$notificationId = $moduleImportResult.id
 
-if($null -ne $needRestart -and $needRestart -gt 0){
-    Write-Output "Restarting website"
-    Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
-  }
+# create status request json, we only need to get 1 and 1st notification
+$NotificationStateJson = @"
+     {"Ids":["$notificationId"],"start":0, "count": 1}     
+"@
+
+$cycleCount = 0
+$startIndex = 0
+try {
+    do {
+        # Retrieve notification state
+        $moduleState = Invoke-RestMethod "$modulesStateUrl" -Body $NotificationStateJson -Method Post -ContentType "application/json" -Headers $headers
+
+        # display all statuses
+        if ($moduleState.NotifyEvents -ne $null -and $moduleState.NotifyEvents.Length -ne 0) {
+            $notificationState = $moduleState.NotifyEvents[0]
+            if ($notificationState.progressLog.Count -gt 0 -and $notificationState.progressLog -ne $null) {
+                #Write-Output $notificationState
+                for ($i = $startIndex; $i -lt $notificationState.progressLog.Count; $i++) {
+                    Write-Output $notificationState.progressLog[$i].Message 
+                }
+                $startIndex = $notificationState.progressLog.Count - 1
+            }                        
+        }
+        $cycleCount = $cycleCount + 1 
+        Start-Sleep -s 3
+    }
+    while ($notificationState.finished -eq $null -and $cycleCount -lt 60) # stop processing after 3 min or when notifications had stopped $moduleState.NotifyEvents.Length -ne 0 -and
+    if($null -eq $notificationState.finished){
+        Write-Output "error on modules installation"
+        Write-Output $moduleState
+        exit 1
+    }
+    if($null -ne $needRestart -and $needRestart -gt 0){
+      Write-Output "Restarting website"
+      $moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
+    }
+}
+catch {
+    $cycleCount = $cycleCount + 1 
+    $message = $_.Exception.Message
+    Write-Output "Error: $message"
+    throw $_.Exception
+}
