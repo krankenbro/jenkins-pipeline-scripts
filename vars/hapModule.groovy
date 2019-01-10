@@ -98,7 +98,7 @@ import jobs.scripts.*
 						Packaging.checkInstalledModules(this)
 
 						// now create sample data
-						Packaging.createSampleData(this)
+						//Packaging.createSampleData(this)
 					}
 				}
 
