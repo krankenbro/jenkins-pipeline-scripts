@@ -218,9 +218,9 @@ class Packaging {
 
     def static startAnalyzer(context)
     {
-        context.dir("${context.env.WORKSPACE}\\.sonarqube"){
-            context.deleteDir()
-        }
+        // context.dir("${context.env.WORKSPACE}\\.sonarqube"){
+        //     context.deleteDir()
+        // }
         def sqScannerMsBuildHome = context.tool 'Scanner for MSBuild'
         def fullJobName = Utilities.getRepoName(context)
         def coverageFolder = Utilities.getCoverageFolder(context)
