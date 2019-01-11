@@ -189,18 +189,12 @@ class Packaging {
 
     def static runBuild(context, solution)
     {
-        if(context.projectType == 'NETCORE2')
-        {
-            //context.bat "dotnet restore" // no need to run it in .net core 2.0, it should run as part of dotnet msbuild
-            //context.bat "dotnet msbuild \"${solution}\" -c Debug"
-            // we need to use MSBuild directly to allow sonar analysis to work
-            // DebugType=Full is for OpenCover
-            context.bat "\"${context.tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m /p:DebugType=Full /nodereuse:false"
-        }
-        else
-        {
-		    context.bat "Nuget restore ${solution}"
-            context.bat "\"${context.tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m /nodereuse:false"
+        //context.bat "dotnet restore" // no need to run it in .net core 2.0, it should run as part of dotnet msbuild
+        //context.bat "dotnet msbuild \"${solution}\" -c Debug"
+        // we need to use MSBuild directly to allow sonar analysis to work
+        // DebugType=Full is for OpenCover
+        context.withEnv(["MSBUILDDISABLENODEREUSE=1"]){
+            context.bat "\"${context.tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m /p:DebugType=Full"
         }
     }
 
