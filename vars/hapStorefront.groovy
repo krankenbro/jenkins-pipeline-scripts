@@ -149,6 +149,7 @@ def call(body) {
 			stage('Cleanup') {
 				timestamps { 
 					//Packaging.cleanBuild(this, solution)
+					bat "dotnet build-server shutdown"
 					bat "docker image prune --force"
 				}
 			}	
