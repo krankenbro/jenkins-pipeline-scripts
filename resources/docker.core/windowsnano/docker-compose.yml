@@ -16,7 +16,6 @@ services:
     image: virtocommerce/platform:${DOCKER_TAG:-latest}
     ports:
       - "${DOCKER_PLATFORM_PORT:-8090}:80"
-      - "80:90"
     environment:
       - VIRTO_CONN_STR_VIRTOCOMMERCE=Data Source=vc-db;Initial Catalog=VirtoCommerce2;Persist Security Info=True;User ID=sa;Password=v!rto_Labs!;MultipleActiveResultSets=True;Connect Timeout=30;
       - VIRTO_CONN_STR_AssetsConnectionString=provider=LocalStorage;rootPath=~/App_Data/Assets;publicUrl=http://localhost:${DOCKER_PLATFORM_PORT:-8090}/assets;VirtoCommerce:Modules:GitHubAuthorizationToken=${GITHUB_AUTH_TOKEN};VirtoCommerce:ModulesDataSources="${MODULES_REPO}";
