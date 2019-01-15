@@ -32,8 +32,8 @@ services:
     ports:
       - "${DOCKER_STOREFRONT_PORT:-8080}:80"
     environment:
-      - VirtoCommerce:Endpoint:Url=http://localhost:${DOCKER_PLATFORM_PORT:-8090}
-      - VirtoCommerce:LiquidThemeEngine:DefaultThemeName=default
+      - VirtoCommerce:Endpoint:Url=http://vc-platform-web
+      - VirtoCommerce:LiquidThemeEngine:DefaultThemeName="default"
     depends_on:
       - vc-platform-web
     volumes:
