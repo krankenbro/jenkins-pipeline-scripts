@@ -18,7 +18,8 @@ services:
       - "${DOCKER_PLATFORM_PORT:-8090}:80"
     environment:
       - VIRTO_CONN_STR_VIRTOCOMMERCE=Data Source=vc-db;Initial Catalog=VirtoCommerce2;Persist Security Info=True;User ID=sa;Password=v!rto_Labs!;MultipleActiveResultSets=True;Connect Timeout=30;
-      - VIRTO_CONN_STR_AssetsConnectionString=provider=LocalStorage;rootPath=~/App_Data/Assets;publicUrl=http://localhost:${DOCKER_PLATFORM_PORT:-8090}/assets;VirtoCommerce:Modules:GitHubAuthorizationToken=${GITHUB_AUTH_TOKEN};VirtoCommerce:ModulesDataSources="${MODULES_REPO}";VirtoCommerce:LiquidThemeEngine:DefaultThemeName="default";CmsConnectionString=~/App_Data/cms-content
+      - VIRTO_CONN_STR_AssetsConnectionString=provider=LocalStorage;rootPath=~/App_Data/Assets;publicUrl=http://localhost:${DOCKER_PLATFORM_PORT:-8090}/assets;VirtoCommerce:Modules:GitHubAuthorizationToken=${GITHUB_AUTH_TOKEN};VirtoCommerce:ModulesDataSources="${MODULES_REPO}";
+      - CmsConnectionString=~/App_Data/cms-content
     depends_on:
       - vc-db
     volumes:
@@ -31,7 +32,8 @@ services:
     ports:
       - "${DOCKER_STOREFRONT_PORT:-8080}:80"
     environment:
-      - VirtoCommerce:Endpoint:Url=http://vc-platform-web
+      - VirtoCommerce:Endpoint:Url=http://localhost:${DOCKER_PLATFORM_PORT:-8090}
+      - VirtoCommerce:LiquidThemeEngine:DefaultThemeName=default
     depends_on:
       - vc-platform-web
     volumes:
