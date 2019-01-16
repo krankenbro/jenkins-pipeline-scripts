@@ -24,6 +24,7 @@ services:
       - vc-db
     volumes:
       - cms-content-volume:c:\vc-platform\App_Data\cms-content
+      - cms-content-volume:c:\vc-platform\App_Data\Assets\cms-content
     networks:
       - virto
 
