@@ -16,10 +16,16 @@ if ([string]::IsNullOrWhiteSpace($hmacSecret)) {
 }
 
 $checkModulesUrl = "$apiurl/api/platform/modules"
+$restartUrl = "$apiurl/api/platform/modules/restart"
 
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
+
+Write-Output "restart again"
+$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
+Start-Sleep -s 5
+
 $modules = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
 $installedModules = 0
 if ($modules.Length -le 0) {
