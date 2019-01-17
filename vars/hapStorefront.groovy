@@ -166,6 +166,7 @@ def call(body) {
 		}
 		finally {
 			Packaging.stopDockerTestEnvironment(this, dockerTag)
+			Utilities.generateAllureReport(this)
 			if(currentBuild.result != 'FAILURE') {
 				step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
 			}
