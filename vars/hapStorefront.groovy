@@ -23,7 +23,7 @@ def call(body) {
 		def deployScript = 'VC-Platform2AzureDev.ps1'
 		def dockerTag = "${env.BRANCH_NAME}-branch"
 		def buildOrder = Utilities.getNextBuildOrder(this)
-		if (env.BRANCH_NAME == 'master') {
+		if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
 			deployScript = 'VC-Platform2AzureQA.ps1'
 			dockerTag = "latest"
 		}
