@@ -90,36 +90,41 @@ def call(body) {
 			}			
 
 			// No need to occupy a node
-			stage("Quality Gate"){
-				Packaging.checkAnalyzerGate(this)
-			}
+			// stage("Quality Gate"){
+			// 	Packaging.checkAnalyzerGate(this)
+			// }
 
-			if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2') // skip docker and publishing for NET4
-			{
-				if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-					stage('Docker Test Environment') {
-						timestamps { 
-							// Start docker environment				
-							Packaging.startDockerTestEnvironment(this, dockerTag)
-							
-							// install modules
-							Packaging.installModules(this, 1)	
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
+				stage('Docker Test Environment') {
+					timestamps { 
+						// Start docker environment				
+						Packaging.startDockerTestEnvironment(this, dockerTag)
+						
+						// install modules
+						Packaging.installModules(this, 1)	
 
-							// check installed modules
-							Packaging.checkInstalledModules(this)
+						// check installed modules
+						Packaging.checkInstalledModules(this)
 
-							// now create sample data
-							Packaging.createSampleData(this)					
-						}
+						// now create sample data
+						Packaging.createSampleData(this)					
 					}
+				}
 
-					stage('Theme build and deploy'){
-						def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
-						build(job: "../hap-theme/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
-						Packaging.installTheme(this, themePath)
+				stage('Theme build and deploy'){
+					def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
+					build(job: "../hap-theme/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
+					Packaging.installTheme(this, themePath)
+				}
+
+				stage('E2E')
+				{
+					timestamps 
+					{
+						Utilities.runE2E(this)
 					}
-				}		
-			}
+				}
+			}		
 
 			// if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
 			// 	stage('Publish'){
