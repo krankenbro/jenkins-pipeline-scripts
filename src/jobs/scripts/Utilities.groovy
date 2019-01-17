@@ -430,7 +430,7 @@ class Utilities {
 
 
     def static getE2ETests(context){
-        context.git credentialsId: context.env.GITHUB_CREDENTIALS_ID, url: 'https://github.com/heineken-asia-pacific/hap-quality-gate.git​​​​​​​'
+        context.git credentialsId: context.env.GITHUB_CREDENTIALS_ID, url: 'https://github.com/heineken-asia-pacific/hap-quality-gate.git'
     }
 
     def static runE2E(context){
