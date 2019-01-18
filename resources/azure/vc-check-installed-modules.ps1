@@ -27,7 +27,9 @@ $moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "applic
 Start-Sleep -s 5
 
 $modules = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
-Write-Output $modules
+$modules_json = $modules | ConvertTo-Json
+Write-Output $modules_json
+
 $installedModules = 0
 if ($modules.Length -le 0) {
     Write-Output "No module's info returned"
