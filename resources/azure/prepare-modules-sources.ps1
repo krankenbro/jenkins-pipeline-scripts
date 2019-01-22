@@ -88,4 +88,4 @@ Foreach($module in $modules)
     }
 }
 Write-Output "Modules installed: $installedModules"
-$virtoModules | ConvertTo-Json -Depth 3 | Out-File -FilePath \projects\modmod.json
+$virtoModules | ConvertTo-Json -Depth 3 | Out-File $outFile
