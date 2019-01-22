@@ -128,6 +128,7 @@ class Packaging {
 
     def static installModules(context, needRestart)
     {
+        prepareVirtoModulesSource(context, "C:\\CICD\\virto.json")
     	def wsFolder = context.pwd()
         def platformContainer = Utilities.getPlatformContainer(context)
  	    context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-modules.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -platformContainer ${platformContainer} -needRestart ${needRestart} -ErrorAction Stop"
@@ -147,6 +148,11 @@ class Packaging {
 
     def static createSwaggerSchema(context, swaggerFile) {
         context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-get-swagger.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -swaggerFile \"${swaggerFile}\" -ErrorAction Stop"
+    }
+
+    def static prepareVirtoModulesSource(context, outFile)
+    {
+        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\prepare-modules-sources.ps1\" -outFile \"${outFile}\""
     }
 
     def static createReleaseArtifact(context, version, webProject, zipArtifact, websiteDir)

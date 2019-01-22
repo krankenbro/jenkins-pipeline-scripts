@@ -36,7 +36,8 @@ $headers.Add("Authorization", $headerValue)
 
 Write-Output "Replace web.config & add modules.json"
 docker cp C:\CICD\web.config ${platformContainer}:/vc-platform/
-docker cp C:\CICD\modules.json ${platformContainer}:/vc-platform/
+docker cp C:\CICD\hap.json ${platformContainer}:/vc-platform/
+docker cp C:\CICD\virto.json ${platformContainer}:/vc-platform/
 
 Write-Output "Restarting website"
 $moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
