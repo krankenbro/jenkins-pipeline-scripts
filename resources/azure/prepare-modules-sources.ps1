@@ -15,7 +15,7 @@ function Add-ModuleBundle
     }
     else
     {
-        $hapGroup = ("hap")
+        $hapGroup = @("hap")
         $module | Add-Member -Name "groups" -Value $hapGroup -MemberType NoteProperty
     }
 }
