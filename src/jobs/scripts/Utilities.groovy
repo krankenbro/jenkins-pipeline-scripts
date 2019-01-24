@@ -8,7 +8,8 @@ class Utilities {
     private static String DefaultAdminDockerPrefix = 'http://localhost'
     private static Integer DefaultPlatformPort = 8091
     private static Integer DefaultStorefrontPort = 8081
-    private static Integer DefaultSqlPort = 1434    
+    private static Integer DefaultSqlPort = 1434  
+    private static String OrgName = "heineken-asia-pacific"  
 
     /**
      * Get the folder name for a job.
@@ -29,7 +30,7 @@ class Utilities {
 
     def static getOrgName(context)
     {
-        return "VirtoCommerce"
+        return OrgName
     }
 
     def static runSharedPS(context, scriptName, args = '')

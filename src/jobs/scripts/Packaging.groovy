@@ -328,7 +328,8 @@ class Packaging {
 		context.bat "${context.env.Utils}\\github-release release --user $REPO_ORG --repo $REPO_NAME --tag v${version} --description \"${releaseNotes}\""
 		context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
 		context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
-		return "https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
+        def url = context.powershell(returnStdout: true, script: "\"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\get-latest-release.ps1\" -RepoOrg ${REPO_ORG} -RepoName ${REPO_NAME} -ErrorAction Stop")
+		return url
 	}
 
 	def static getShouldPublish(context)
