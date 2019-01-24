@@ -6,6 +6,8 @@ param(
 )
 $api = "https://api.github.com/repos/${RepoOrg}/${RepoName}/releases/latest"
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 $headerAuth = "Bearer ${GITHUB_API_TOKEN}"
 $header = @{}
 $header.Add("Authorization", $headerAuth)
