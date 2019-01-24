@@ -76,7 +76,6 @@ Foreach($module in $modules)
                 Add-ModuleBundle $vModule
                 Fix-Version $vModule $module.version
                 Update-Dependencies $vModule $module
-                Write-Output $vModule
             }
         }
     }
@@ -87,5 +86,5 @@ Foreach($module in $modules)
         exit 1
     }
 }
-Write-Output "Modules installed: $installedModules"
+Write-Output "Modules installed on source platform: $installedModules"
 $virtoModules | ConvertTo-Json -Depth 3 | Out-File $outFile
