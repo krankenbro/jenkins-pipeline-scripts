@@ -119,19 +119,19 @@ import jobs.scripts.*
 				}				
 			}				
 
-			// if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-			// 	stage('Publish')
-			// 	{
-			// 		timestamps { 	
-			// 			Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")				
-			// 			if (Packaging.getShouldPublish(this)) {
-			// 				processManifests(true) // publish artifacts to github releases
-			// 			}
-			// 			if(env.BRANCH_NAME == 'master')
-			// 				Packaging.createNugetPackages(this)
-			// 		}
-			// 	}
-			// }		
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
+				stage('Publish')
+				{
+					timestamps { 	
+						//Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")				
+						// if (Packaging.getShouldPublish(this)) {
+							processManifests(true) // publish artifacts to github releases
+						// }
+						// if(env.BRANCH_NAME == 'master')
+						// 	Packaging.createNugetPackages(this)
+					}
+				}
+			}		
 
 			stage('Cleanup') {
 				timestamps { 
@@ -233,28 +233,23 @@ def processManifest(def publish, def manifestPath)
 
 	if (publish) {
 		packageUrl = Packaging.publishRelease(this, version, releaseNotes)
+		echo "packageUrl is ${packageUrl}"
+		// updateModule(
+		// 	id,
+		// 	version,
+		// 	platformVersion,
+		// 	title,
+		// 	authors,
+		// 	owners,
+		// 	description,
+		// 	dependencies,
+		// 	projectUrl,
+		// 	packageUrl,
+		// 	iconUrl)
 
-		updateModule(
-			id,
-			version,
-			platformVersion,
-			title,
-			authors,
-			owners,
-			description,
-			dependencies,
-			projectUrl,
-			packageUrl,
-			iconUrl)
-
-		publishTweet("${title} ${version} published ${projectUrl} #virtocommerceci")
 	}
 }
 
-def publishTweet(def status)
-{
-	//bat "powershell.exe -File \"${env.JENKINS_HOME}\\workflow-libs\\vars\\twitter.ps1\" -status \"${status}\""
-}
 
 def updateModule(def id, def version, def platformVersion, def title, def authors, def owners, def description, def dependencies, def projectUrl, def packageUrl, def iconUrl)
 {
