@@ -34,7 +34,7 @@ import jobs.scripts.*
 			// 	return true
 			// }
 
-			stage('Build + Analyze')
+			stage('Build')
 			{
 				timestamps { 
 					// clean folder for a release
@@ -47,7 +47,7 @@ import jobs.scripts.*
 				}
 			}
 
-			stage('Package Module')
+			stage('Packaging')
 			{
 				timestamps { 				
 					processManifests(false) // prepare artifacts for testing
@@ -61,33 +61,23 @@ import jobs.scripts.*
 				}
 			}
 
-			stage('Submit Analysis') {
+			stage('Code Analysis') {
 				timestamps { 
 					Packaging.endAnalyzer(this)
+					Packaging.checkAnalyzerGate(this)
 				}
-			}
-
-			// No need to occupy a node
-			stage("Quality Gate"){
-				Packaging.checkAnalyzerGate(this)
-			}	
-
-			/*if (env.BRANCH_NAME == 'master') {
-				stage('Build platform and storefront') {
-					timestamps{
-						build(job: "../vc-platform/${env.BRANCH_NAME}", parameters: [booleanParam(name: 'isCaused', value: true)])
-                        build(job: "../vc-storefront-core/${env.BRANCH_NAME}", parameters: [booleanParam(name: 'isCaused', value: true)])
-					}
-				}
-			}*/
-			
+			}			
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
 				stage('Prepare Test Environment') {
 					timestamps { 
 						// Start docker environment
 						Packaging.startDockerTestEnvironment(this, dockerTag)
+					}
+				}
 
+				stage('Install VC Modules'){
+					timestamps{
 						// install modules
 						Packaging.installModules(this, 0)
 
@@ -96,9 +86,13 @@ import jobs.scripts.*
 
 						//check installed modules
 						Packaging.checkInstalledModules(this)
+					}
+				}
 
+				stage('Install Sample Data'){
+					timestamps{
 						// now create sample data
-						//Packaging.createSampleData(this)
+						Packaging.createSampleData(this)
 					}
 				}
 

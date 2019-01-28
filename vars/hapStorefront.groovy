@@ -52,7 +52,7 @@ def call(body) {
 				}				
 			}
 
-			stage('Build + Analyze') {		
+			stage('Build') {		
 				timestamps {		
 					
 					Packaging.startAnalyzer(this)
@@ -63,7 +63,7 @@ def call(body) {
 			def version = Utilities.getAssemblyVersion(this, webProject)
 			def dockerImage
 
-			stage('Package') {
+			stage('Packaging') {
 				timestamps { 
 					Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
 					if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
@@ -76,42 +76,45 @@ def call(body) {
 			def tests = Utilities.getTestDlls(this)
 			if(tests.size() > 0)
 			{
-				stage('Tests') {
+				stage('Unit Tests') {
 					timestamps { 
 						Packaging.runUnitTests(this, tests)
 					}
 				}
 			}		
 
-			stage('Submit Analysis') {
+			stage('Code Analysis') {
 				timestamps { 
 					Packaging.endAnalyzer(this)
+					// 	Packaging.checkAnalyzerGate(this)
 				}
 			}			
 
-			// No need to occupy a node
-			// stage("Quality Gate"){
-			// 	Packaging.checkAnalyzerGate(this)
-			// }
-
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
-				stage('Docker Test Environment') {
+				stage('Create Test Environment') {
 					timestamps { 
 						// Start docker environment				
-						Packaging.startDockerTestEnvironment(this, dockerTag)
-						
-						// install modules
-						Packaging.installModules(this, 1)	
-
-						// check installed modules
-						Packaging.checkInstalledModules(this)
-
-						// now create sample data
-						Packaging.createSampleData(this)					
+						Packaging.startDockerTestEnvironment(this, dockerTag)					
 					}
 				}
 
-				stage('Theme build and deploy'){
+				stage('Install VC Modules'){
+						timestamps{
+							// install modules
+							Packaging.installModules(this, 1)
+							// check installed modules
+							Packaging.checkInstalledModules(this)
+						}
+				}
+				
+				stage('Install Sample Data'){
+					timestamps{
+						// now create sample data
+						Packaging.createSampleData(this)	
+					}
+				}
+
+				stage('Theme Build and Deploy'){
 					def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
 					build(job: "../hap-theme/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
 					Packaging.installTheme(this, themePath)
