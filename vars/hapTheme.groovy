@@ -25,14 +25,14 @@ def call(body) {
 				}
 			}
 
-			stage('Build + Analyze') {
+			stage('Build') {
 				timestamps { 
                     Packaging.startSonarJS(this)
 					Packaging.runGulpBuild(this)
 				}
 			}
 
-			// stage('Quality Gate'){
+			// stage('Code Analysis'){
             //     timestamps{
             //         Packaging.checkAnalyzerGate(this)
             //     }
