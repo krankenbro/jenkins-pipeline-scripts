@@ -56,13 +56,13 @@ def call(body) {
 			// 	}			
 			// }
 
-			// if (Packaging.getShouldPublish(this)) {
-			// 	stage('Publish') {
-			// 		timestamps { 
-			// 			Packaging.publishRelease(this, version, "")
-			// 		}
-			// 	}
-			// }
+			if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
+				stage('Publish') {
+					timestamps { 
+						Packaging.publishRelease(this, version, "")
+					}
+				}
+			}
 		}
 		catch (any) {
 			currentBuild.result = 'FAILURE'
