@@ -129,28 +129,21 @@ def call(body) {
 				}
 			}		
 
-			// if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-			// 	stage('Publish'){
-			// 		timestamps { 
-			// 			if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2')
-			// 			{
-			// 				Packaging.pushDockerImage(this, dockerImage, dockerTag)
-			// 			}
-			// 			if (Packaging.getShouldPublish(this)) {
-			// 				def notes = Utilities.getReleaseNotes(this, webProject)
-			// 				Packaging.publishRelease(this, version, notes)
-			// 			}
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+				stage('Publish'){
+					timestamps { 
+						if (Packaging.getShouldPublish(this)) {
+							def notes = Utilities.getReleaseNotes(this, webProject)
+							Packaging.publishRelease(this, version, notes)
+						}
 
-			// 			if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2')
-			// 			{
-			// 				Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")
-			// 			}
-
-			// 			if(env.BRANCH_NAME == 'master')
-			// 				Packaging.createNugetPackages(this)
-			// 		}
-			// 	}
-			// }
+						// if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2')
+						// {
+						// 	Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")
+						// }
+					}
+				}
+			}
 
 
 
