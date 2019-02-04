@@ -120,13 +120,13 @@ def call(body) {
 					Packaging.installTheme(this, themePath)
 				}
 
-				// stage('E2E')
-				// {
-				// 	timestamps 
-				// 	{
-				// 		Utilities.runE2E(this)
-				// 	}
-				// }
+				stage('E2E')
+				{
+					timestamps 
+					{
+						Utilities.runE2E(this)
+					}
+				}
 			}		
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'stage' || env.BRANCH_NAME == 'master') {
