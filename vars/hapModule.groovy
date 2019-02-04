@@ -110,7 +110,15 @@ import jobs.scripts.*
 					timestamps { 					
 						Modules.runIntegrationTests(this)
 					}
-				}				
+				}	
+
+				// stage('E2E')
+				// {
+				// 	timestamps 
+				// 	{
+				// 		Utilities.runE2E(this)
+				// 	}
+				// }			
 			}				
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
