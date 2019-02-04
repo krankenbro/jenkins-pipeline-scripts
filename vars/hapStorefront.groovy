@@ -129,13 +129,11 @@ def call(body) {
 				// }
 			}		
 
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'stage' || env.BRANCH_NAME == 'master') {
 				stage('Publish'){
 					timestamps { 
-						if (Packaging.getShouldPublish(this)) {
-							def notes = Utilities.getReleaseNotes(this, webProject)
-							Packaging.publishRelease(this, version, notes)
-						}
+						def notes = Utilities.getReleaseNotes(this, webProject)
+						Packaging.publishRelease(this, version, notes)
 
 						// if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2')
 						// {
