@@ -127,7 +127,7 @@ import jobs.scripts.*
 					timestamps { 	
 						//Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")				
 						// if (Packaging.getShouldPublish(this)) {
-							processManifests(true) // publish artifacts to github releases
+							// processManifests(true) // publish artifacts to github releases
 						// }
 						// if(env.BRANCH_NAME == 'master')
 						// 	Packaging.createNugetPackages(this)

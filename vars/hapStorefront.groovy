@@ -133,7 +133,7 @@ def call(body) {
 				stage('Publish'){
 					timestamps { 
 						def notes = Utilities.getReleaseNotes(this, webProject)
-						Packaging.publishRelease(this, version, notes)
+						// Packaging.publishRelease(this, version, notes)
 
 						// if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2')
 						// {

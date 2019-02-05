@@ -59,7 +59,7 @@ def call(body) {
 			if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
 				stage('Publish') {
 					timestamps { 
-						Packaging.publishRelease(this, version, "")
+						// Packaging.publishRelease(this, version, "")
 					}
 				}
 			}
