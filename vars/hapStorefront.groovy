@@ -132,6 +132,7 @@ def call(body) {
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'stage' || env.BRANCH_NAME == 'master') {
 				stage('Publish'){
 					timestamps { 
+						//qa -> pre-release; master -> release
 						def notes = Utilities.getReleaseNotes(this, webProject)
 						// Packaging.publishRelease(this, version, notes)
 
