@@ -16,7 +16,6 @@ def call(body) {
 			projectType = 'Theme'
 		}
 		try {
-			echo "Building branch ${env.BRANCH_NAME}"
 
 			stage('Checkout') {
 				timestamps { 
@@ -41,23 +40,30 @@ def call(body) {
 				}
 			}
 
-			stage('Unit Tests'){
-				timestamps{
-					bat "npm run test"
-				}
-			}
+			// stage('Unit Tests'){
+			// 	timestamps{
+			// 		bat "npm run test"
+			// 	}
+			// }
 
-			stage('E2E'){
-				timestamps{
-					bat "npm run e2e"
-				}
-			}
+			// stage('E2E'){
+			// 	timestamps{
+			// 		bat "npm run e2e"
+			// 	}
+			// }
 
 			// stage('Code Analysis'){
             //     timestamps{
             //         Packaging.checkAnalyzerGate(this)
             //     }
             // }
+
+			stage('test deploy'){
+				timestamps{
+					zip zipFile: "theme.zip" dir: "dist\\*"
+					Packaging.themeDeploy(this)
+				}
+			}
 
 			if(params.themeResultZip != null){
                 def artifacts = findFiles(glob: 'artifacts/*.zip')

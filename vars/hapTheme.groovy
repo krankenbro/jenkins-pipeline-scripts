@@ -16,8 +16,6 @@ def call(body) {
 			projectType = 'Theme'
 		}
 		try {
-			echo "Building branch ${env.BRANCH_NAME}"
-
 			stage('Checkout') {
 				timestamps { 
 					deleteDir()

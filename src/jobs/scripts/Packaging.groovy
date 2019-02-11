@@ -392,6 +392,10 @@ class Packaging {
         context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-theme.ps1\" -themeZip \"${path}\" -platformContainer ${platformContainer} -ErrorAction Stop"
     }  
 
+    def static themeDeploy(context){
+        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\theme2webapp.ps1\""
+    }
+
 	def static publishThemePackage(context)
 	{
 		// find all manifests
