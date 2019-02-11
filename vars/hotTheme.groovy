@@ -37,19 +37,19 @@ def call(body) {
         			}
 
 					bat "npm install"
-					bat "ng build"
+					bat "npm run build"
 				}
 			}
 
 			stage('Unit Tests'){
 				timestamps{
-					bat "ng test"
+					bat "npm run test"
 				}
 			}
 
 			stage('E2E'){
 				timestamps{
-					bat "ng e2e"
+					bat "npm run e2e"
 				}
 			}
 
