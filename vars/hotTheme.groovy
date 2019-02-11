@@ -60,7 +60,7 @@ def call(body) {
 
 			stage('test deploy'){
 				timestamps{
-					zip zipFile: "theme.zip" dir: "dist\\*"
+					zip zipFile: "theme.zip", dir: "dist\\*"
 					Packaging.themeDeploy(this)
 				}
 			}
