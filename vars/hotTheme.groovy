@@ -27,8 +27,15 @@ def call(body) {
 
 			stage('Build') {
 				timestamps { 
-                    Packaging.startSonarJS(this)
+                    //Packaging.startSonarJS(this)
 					//Packaging.runGulpBuild(this)
+					def sqScannerMsBuildHome = tool 'Scanner for MSBuild'
+					def fullJobName = Utilities.getRepoName(this)
+
+					withSonarQubeEnv('VC Sonar Server') {
+						bat "\"${sqScannerMsBuildHome}\\sonar-scanner-3.0.3.778\\bin\\sonar-scanner.bat\" scan -Dsonar.projectKey=${fullJobName}_${env.BRANCH_NAME} -Dsonar.sources=./src -Dsonar.branch=${env.BRANCH_NAME} -Dsonar.projectName=\"${fullJobName}\" -Dsonar.host.url=%SONAR_HOST_URL% -Dsonar.login=%SONAR_AUTH_TOKEN%"
+        			}
+
 					bat "npm install"
 					bat "ng build"
 				}
@@ -45,7 +52,7 @@ def call(body) {
 					bat "ng e2e"
 				}
 			}
-			
+
 			// stage('Code Analysis'){
             //     timestamps{
             //         Packaging.checkAnalyzerGate(this)
