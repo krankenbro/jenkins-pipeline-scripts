@@ -393,7 +393,7 @@ class Packaging {
     }  
 
     def static themeDeploy(context){
-        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\theme2webapp.ps1\""
+        context.powershell "\"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\theme2webapp.ps1\""
     }
 
 	def static publishThemePackage(context)
