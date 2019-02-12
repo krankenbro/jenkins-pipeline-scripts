@@ -1,3 +1,4 @@
+Import-Module "$env:Utils\azurerm\AzureRM.psm1"
 # Get Platform Zip File
 
 $Path2Zip = Get-Childitem -Recurse -Path "${env:WORKSPACE}\dist\" -File -Include *.zip
