@@ -11,8 +11,7 @@ $TenantID = "${env:AzureTenantID}"
 $SubscriptionID = "${env:AzureSubscriptionIDDev}"
 
 Add-AzureRmAccount -Credential $psCred -TenantId $TenantID -ServicePrincipal
-#Select-AzureRmSubscription -SubscriptionId $SubscriptionID
-Select-AzureRmSubscription -TenantId $TenantID
+Select-AzureRmSubscription -SubscriptionId $SubscriptionID
 
 $DestResourceGroupName = "${env:AzureResourceGroupNameDev}"
 $DestWebAppName = "${env:AzureWebAppAdminNameDev}"
