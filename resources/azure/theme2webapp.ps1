@@ -1,5 +1,3 @@
-Import-Module Az
-Import-Module AzureRM
 # Get Platform Zip File
 
 $Path2Zip = Get-Childitem -Recurse -Path "${env:WORKSPACE}\dist\" -File -Include *.zip
