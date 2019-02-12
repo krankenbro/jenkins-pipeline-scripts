@@ -61,7 +61,8 @@ def call(body) {
 			stage('test deploy'){
 				timestamps{
 					zip zipFile: "dist\\theme.zip", dir: "dist\\hei-theme"
-					Packaging.themeDeploy(this)
+					//Packaging.themeDeploy(this)
+					Utilities.runSharedPS(this, "resources\\azure\\theme2webapp.ps1")
 				}
 			}
 
