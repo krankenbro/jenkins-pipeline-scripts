@@ -16,13 +16,13 @@ $ApplicationID ="${env:AzureAppID}"
 $APIKey = ConvertTo-SecureString "${env:AzureAPIKey}" -AsPlainText -Force
 $psCred = New-Object System.Management.Automation.PSCredential($ApplicationID, $APIKey)
 $TenantID = "${env:AzureTenantID}"
-$SubscriptionID = "${env:AzureSubscriptionIDDev}"
+$SubscriptionID = "${env:HotAzureSubscriptionIDDev}"
 
 Add-AzureRmAccount -Credential $psCred -TenantId $TenantID -ServicePrincipal
 Select-AzureRmSubscription -SubscriptionId $SubscriptionID
 
-$DestResourceGroupName = "${env:AzureResourceGroupNameDev}"
-$DestWebAppName = "${env:AzureWebAppAdminNameDev}"
+$DestResourceGroupName = "${env:HotAzureResourceGroupNameDev}"
+$DestWebAppName = "${env:HotAzureWebAppAdminNameDev}"
 $DestKuduPath = "https://$DestWebAppName.scm.azurewebsites.net/api/zip/site/wwwroot/modules/$ModuleName/"
 
 function Get-AzureRmWebAppPublishingCredentials($DestResourceGroupName, $DestWebAppName, $slotName = $null){
