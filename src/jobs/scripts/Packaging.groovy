@@ -327,8 +327,20 @@ class Packaging {
 
         REPO_ORG = 'krankenbro'
         REPO_NAME = 'vc-pipelines'
-		context.bat "${context.env.Utils}\\github-release release --user $REPO_ORG --repo $REPO_NAME --tag v${version} --description \"${releaseNotes}\""
-		context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
+        def date = new Date()
+        String datePart = date.format("dd-MM-yyyy")
+        String timePart = date.format("HH.mm")
+        String timePartPretty = date.format("HH:mm")
+        def tag = datePart + "T" + timePart
+        def namePreRelease = datePart + " @ " + timePartPretty
+        if(context.env.BRANCH_NAME == 'master'){
+            context.bat "${context.env.Utils}\\github-release release --user $REPO_ORG --repo $REPO_NAME --tag v${version} --description \"${releaseNotes}\""
+            context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
+        }
+        else if(context.env.BRANCH_NAME == 'dev'){
+            context.bat "${context.env.Utils}\\github-release release --user $REPO_ORG --repo $REPO_NAME --tag \"${tag}\" --name \"${namePreRelease}\" --description \"${releaseNotes}\" --pre-release"
+            context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag \"${tag}\" --name \"${artifact}\" --file \"${artifact}\""
+        }
 		// context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
         def url = context.bat(returnStdout: true, script: "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\get-latest-release.ps1\" -RepoOrg ${REPO_ORG} -RepoName ${REPO_NAME} -ErrorAction Stop")
 		return url
