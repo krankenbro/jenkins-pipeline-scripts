@@ -36,6 +36,7 @@ class Packaging {
         else {
 		    dockerFolder = "docker"
         }
+        dockerImageName = 'hap/storefront'
         context.echo "Building docker image \"${dockerImageName}\" using \"${dockerContextFolder}\" as context folder"
         context.bat "xcopy \"..\\workspace@libs\\virto-shared-library\\resources\\${dockerFolder}\\${dockerFileFolder}\\*\" \"${dockerContextFolder}\\\" /Y /E"
         def dockerImage
