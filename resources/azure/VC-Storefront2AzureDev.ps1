@@ -8,14 +8,14 @@ $ApplicationID ="${env:AzureAppID}"
 $APIKey = ConvertTo-SecureString "${env:AzureAPIKey}" -AsPlainText -Force
 $psCred = New-Object System.Management.Automation.PSCredential($ApplicationID, $APIKey)
 $TenantID = "${env:AzureTenantID}"
-$SubscriptionID = "${env:AzureSubscriptionIDDev}"
+$SubscriptionID = "${env:HotAzureSubscriptionIDDev}"
 
 Add-AzureRmAccount -Credential $psCred -TenantId $TenantID -ServicePrincipal
 Select-AzureRmSubscription -SubscriptionId $SubscriptionID
 
-$DestResourceGroupName = "${env:AzureResourceGroupNameDev}"
-$DestWebAppName = "${env:AzureWebAppNameDev}"
-$DestKuduPath = "https://$DestWebAppName.scm.azurewebsites.net/api/zip/site/wwwroot/"
+$DestResourceGroupName = "${env:HotAzureResourceGroupNameDev}"
+$DestWebAppName = "${env:HotAzureWebAppNameDev}"
+$DestKuduPath = "https://$DestWebAppName.scm.azurewebsites.net/api/zip/site/wwwroot/store/"
 
 function Get-AzureRmWebAppPublishingCredentials($DestResourceGroupName, $DestWebAppName, $slotName = $null){
 	if ([string]::IsNullOrWhiteSpace($slotName)){
