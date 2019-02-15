@@ -69,32 +69,32 @@ import jobs.scripts.*
 			}			
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				stage('Prepare Test Environment') {
-					timestamps { 
-						// Start docker environment
-						Packaging.startDockerTestEnvironment(this, dockerTag)
-					}
-				}
+				// stage('Prepare Test Environment') {
+				// 	timestamps { 
+				// 		// Start docker environment
+				// 		Packaging.startDockerTestEnvironment(this, dockerTag)
+				// 	}
+				// }
 
-				stage('Install VC Modules'){
-					timestamps{
-						// install modules
-						Packaging.installModules(this, 0)
+				// stage('Install VC Modules'){
+				// 	timestamps{
+				// 		// install modules
+				// 		Packaging.installModules(this, 0)
 
-                        // install module
-                        Modules.installModuleArtifacts(this)
+                //         // install module
+                //         Modules.installModuleArtifacts(this)
 
-						//check installed modules
-						Packaging.checkInstalledModules(this)
-					}
-				}
+				// 		//check installed modules
+				// 		Packaging.checkInstalledModules(this)
+				// 	}
+				// }
 
-				stage('Install Sample Data'){
-					timestamps{
-						// now create sample data
-						Packaging.createSampleData(this)
-					}
-				}
+				// stage('Install Sample Data'){
+				// 	timestamps{
+				// 		// now create sample data
+				// 		Packaging.createSampleData(this)
+				// 	}
+				// }
 
 				// stage("Swagger schema validation"){
 				// 	timestamps{
@@ -112,16 +112,16 @@ import jobs.scripts.*
 					}
 				}	
 
-				stage('E2E')
-				{
-					timestamps 
-					{
-						Utilities.runE2E(this)
-					}
-				}			
+				// stage('E2E')
+				// {
+				// 	timestamps 
+				// 	{
+				// 		Utilities.runE2E(this)
+				// 	}
+				// }			
 			}				
 
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
+			if (env.BRANCH_NAME == 'dev') {
 				stage('Publish')
 				{
 					timestamps { 	
@@ -129,8 +129,8 @@ import jobs.scripts.*
 						// if (Packaging.getShouldPublish(this)) {
 							// processManifests(true) // publish artifacts to github releases
 						// }
-						// if(env.BRANCH_NAME == 'master')
-						// 	Packaging.createNugetPackages(this)
+						if(env.BRANCH_NAME == 'dev')
+							Packaging.createNugetPackages(this)
 					}
 				}
 			}		
