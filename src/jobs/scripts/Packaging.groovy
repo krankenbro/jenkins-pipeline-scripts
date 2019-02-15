@@ -201,7 +201,7 @@ class Packaging {
         // we need to use MSBuild directly to allow sonar analysis to work
         // DebugType=Full is for OpenCover
         context.withEnv(["MSBUILDDISABLENODEREUSE=1"]){
-            context.bat "Nuget restore ${solution}"
+            context.bat "Nuget restore ${solution} -ConfigFile \"${context.env.NUGET_CONFIG}\""
             context.bat "\"${context.tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m /p:DebugType=Full"
         }
     }
