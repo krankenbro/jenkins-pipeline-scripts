@@ -91,42 +91,42 @@ def call(body) {
 			}			
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
-				stage('Create Test Environment') {
-					timestamps { 
-						// Start docker environment				
-						Packaging.startDockerTestEnvironment(this, dockerTag)					
-					}
-				}
+				// stage('Create Test Environment') {
+				// 	timestamps { 
+				// 		// Start docker environment				
+				// 		Packaging.startDockerTestEnvironment(this, dockerTag)					
+				// 	}
+				// }
 
-				stage('Install VC Modules'){
-						timestamps{
-							// install modules
-							Packaging.installModules(this, 1)
-							// check installed modules
-							Packaging.checkInstalledModules(this)
-						}
-				}
+				// stage('Install VC Modules'){
+				// 		timestamps{
+				// 			// install modules
+				// 			Packaging.installModules(this, 1)
+				// 			// check installed modules
+				// 			Packaging.checkInstalledModules(this)
+				// 		}
+				// }
 				
-				stage('Install Sample Data'){
-					timestamps{
-						// now create sample data
-						Packaging.createSampleData(this)	
-					}
-				}
+				// stage('Install Sample Data'){
+				// 	timestamps{
+				// 		// now create sample data
+				// 		Packaging.createSampleData(this)	
+				// 	}
+				// }
 
-				stage('Theme Build and Deploy'){
-					def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
-					build(job: "../hap-theme/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
-					Packaging.installTheme(this, themePath)
-				}
+				// stage('Theme Build and Deploy'){
+				// 	def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
+				// 	build(job: "../hap-theme/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
+				// 	Packaging.installTheme(this, themePath)
+				// }
 
-				stage('E2E')
-				{
-					timestamps 
-					{
-						Utilities.runE2E(this)
-					}
-				}
+				// stage('E2E')
+				// {
+				// 	timestamps 
+				// 	{
+				// 		Utilities.runE2E(this)
+				// 	}
+				// }
 			}		
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'stage' || env.BRANCH_NAME == 'master') {
