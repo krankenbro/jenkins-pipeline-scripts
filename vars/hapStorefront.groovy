@@ -138,7 +138,7 @@ def call(body) {
 
 						// if(solution == 'VirtoCommerce.Platform.sln' || projectType == 'NETCORE2')
 						// {
-						// 	Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")
+						// 	Utilities.runSharedPS(this, "${deployScript}")
 						// }
 					}
 				}

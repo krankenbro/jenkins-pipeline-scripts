@@ -136,7 +136,7 @@ def call(body) {
 						def notes = Utilities.getReleaseNotes(this, webProject)
 						Packaging.publishRelease(this, version, notes)
 
-						Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")
+						Utilities.runSharedPS(this, "${deployScript}")
 					}
 				}
 			}

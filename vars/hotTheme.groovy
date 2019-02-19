@@ -62,7 +62,7 @@ def call(body) {
 				timestamps{
 					zip zipFile: "dist\\theme.zip", dir: "dist\\hei-theme"
 					//Packaging.themeDeploy(this)
-					Utilities.runSharedPS(this, "resources\\azure\\theme2webapp.ps1")
+					Utilities.runSharedPS(this, "theme2webapp.ps1")
 				}
 			}
 
@@ -79,7 +79,7 @@ def call(body) {
 			// 	stage('Stage') {
 			// 		timestamps {
 			// 		    def stagingName = Utilities.getStagingNameFromBranchName(this)
-			// 			Utilities.runSharedPS(this, "resources\\azure\\VC-Theme2Azure.ps1", /-StagingName "${stagingName}" -StoreName "${storeName}"/)
+			// 			Utilities.runSharedPS(this, "VC-Theme2Azure.ps1", /-StagingName "${stagingName}" -StoreName "${storeName}"/)
 			// 		}
 			// 	}			
 			// }
