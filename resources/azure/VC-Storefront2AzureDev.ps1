@@ -16,7 +16,7 @@ Select-AzureRmSubscription -SubscriptionId $SubscriptionID
 $DestResourceGroupName = "${env:HotAzureResourceGroupNameDev}"
 $DestWebAppName = "${env:HotAzureWebAppNameDev}"
 $DestKuduPath = "https://$DestWebAppName.scm.azurewebsites.net/api/zip/site/wwwroot/"
-$DestKuduDelPath = "https://$DestWebAppName.scm.azurewebsites.net/api/vfs/site/wwwroot/?recursive=true"​​​​​​​
+$DestKuduDelPath = "https://$DestWebAppName.scm.azurewebsites.net/api/vfs/site/wwwroot/?recursive=true"
 
 function Get-AzureRmWebAppPublishingCredentials($DestResourceGroupName, $DestWebAppName, $slotName = $null){
 	if ([string]::IsNullOrWhiteSpace($slotName)){
