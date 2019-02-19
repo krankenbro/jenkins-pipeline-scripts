@@ -26,8 +26,6 @@ def call(body) {
 
 			stage('Build') {
 				timestamps { 
-                    Packaging.startSonarJS(this)
-					//Packaging.runGulpBuild(this)
 					def sqScannerMsBuildHome = tool 'Scanner for MSBuild'
 					def fullJobName = Utilities.getRepoName(this)
 
