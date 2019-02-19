@@ -42,7 +42,7 @@ Write-Host "Stop WebApp"
 
 Stop-AzureRmWebApp -ResourceGroupName $DestResourceGroupName -Name $DestWebAppName
 
-Start-Sleep -s 20
+Start-Sleep -s 60
 
 Write-Host "Deleting Files in $DestKuduDelPath"
 

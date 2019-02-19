@@ -24,15 +24,19 @@ def call(body) {
 				}
 			}
 
-			stage('Build') {
-				timestamps { 
+			stage('Code Analysis'){
+				timestamps{
 					def sqScannerMsBuildHome = tool 'Scanner for MSBuild'
 					def fullJobName = Utilities.getRepoName(this)
 
 					withSonarQubeEnv('VC Sonar Server') {
 						bat "\"${sqScannerMsBuildHome}\\sonar-scanner-3.0.3.778\\bin\\sonar-scanner.bat\" scan -Dsonar.projectKey=${fullJobName}_${env.BRANCH_NAME} -Dsonar.sources=./src -Dsonar.branch=${env.BRANCH_NAME} -Dsonar.projectName=\"${fullJobName}\" -Dsonar.host.url=%SONAR_HOST_URL% -Dsonar.login=%SONAR_AUTH_TOKEN%"
         			}
+				}
+			}
 
+			stage('Build') {
+				timestamps { 
 					bat "npm install"
 					if(env.BRANCH_NAME == 'qa'){
 						bat "npm run build --prod"
