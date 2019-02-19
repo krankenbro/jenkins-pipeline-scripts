@@ -36,7 +36,12 @@ def call(body) {
         			}
 
 					bat "npm install"
-					bat "npm run build"
+					if(env.BRANCH_NAME == 'master'){
+						bat "npm run build --prod"
+					}
+					else{
+						bat "npm run build"
+					}
 				}
 			}
 
