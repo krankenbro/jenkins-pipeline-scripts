@@ -83,11 +83,14 @@ def call(body) {
 				stage('Publish') {
 					timestamps { 
 						if(params.themeResultZip == null){
-							Packaging.publishRelease(this, version, "")
+							def zipFile = "dist\\theme.zip"
+							zip zipFile: zipFile, dir: "wwwroot"
+
+							//Packaging.publishRelease(this, version, "")
 							
-							zip zipFile: "dist\\theme.zip", dir: "wwwroot"
-							//Packaging.themeDeploy(this)
-							Utilities.runSharedPS(this, "theme2webapp.ps1")
+							Packaging.publishGithubRelease(this, version, "", zipFile)
+							
+							Packaging.themeDeploy(this)
 						}
 					}
 				}
