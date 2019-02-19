@@ -60,7 +60,7 @@ def call(body) {
 
 			stage('test deploy'){
 				timestamps{
-					zip zipFile: "dist\\theme.zip", dir: "dist\\hei-theme"
+					zip zipFile: "dist\\theme.zip", dir: "wwwroot"
 					//Packaging.themeDeploy(this)
 					Utilities.runSharedPS(this, "theme2webapp.ps1")
 				}
