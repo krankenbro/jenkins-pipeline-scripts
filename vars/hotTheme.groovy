@@ -26,7 +26,7 @@ def call(body) {
 
 			stage('Build') {
 				timestamps { 
-                    //Packaging.startSonarJS(this)
+                    Packaging.startSonarJS(this)
 					//Packaging.runGulpBuild(this)
 					def sqScannerMsBuildHome = tool 'Scanner for MSBuild'
 					def fullJobName = Utilities.getRepoName(this)
@@ -36,7 +36,7 @@ def call(body) {
         			}
 
 					bat "npm install"
-					if(env.BRANCH_NAME == 'master'){
+					if(env.BRANCH_NAME == 'qa'){
 						bat "npm run build --prod"
 					}
 					else{
@@ -63,14 +63,6 @@ def call(body) {
             //     }
             // }
 
-			stage('test deploy'){
-				timestamps{
-					zip zipFile: "dist\\theme.zip", dir: "wwwroot"
-					//Packaging.themeDeploy(this)
-					Utilities.runSharedPS(this, "theme2webapp.ps1")
-				}
-			}
-
 			if(params.themeResultZip != null){
                 def artifacts = findFiles(glob: 'artifacts/*.zip')
                 for(artifact in artifacts){
@@ -89,11 +81,15 @@ def call(body) {
 			// 	}			
 			// }
 
-			if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'stage') {
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'qa') {
 				stage('Publish') {
 					timestamps { 
 						if(params.themeResultZip == null){
-							// Packaging.publishRelease(this, version, "")
+							Packaging.publishRelease(this, version, "")
+							
+							zip zipFile: "dist\\theme.zip", dir: "wwwroot"
+							//Packaging.themeDeploy(this)
+							Utilities.runSharedPS(this, "theme2webapp.ps1")
 						}
 					}
 				}
