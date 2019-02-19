@@ -15,7 +15,8 @@ Select-AzureRmSubscription -SubscriptionId $SubscriptionID
 
 $DestResourceGroupName = "${env:HotAzureResourceGroupNameDev}"
 $DestWebAppName = "${env:HotAzureWebAppNameDev}"
-$DestKuduPath = "https://$DestWebAppName.scm.azurewebsites.net/api/zip/site/wwwroot/store/"
+$DestKuduPath = "https://$DestWebAppName.scm.azurewebsites.net/api/zip/site/wwwroot/"
+$DestKuduDelPath = "https://$DestWebAppName.scm.azurewebsites.net/api/vfs/site/wwwroot/?recursive=true"​​​​​​​
 
 function Get-AzureRmWebAppPublishingCredentials($DestResourceGroupName, $DestWebAppName, $slotName = $null){
 	if ([string]::IsNullOrWhiteSpace($slotName)){
@@ -42,6 +43,10 @@ Write-Host "Stop WebApp"
 Stop-AzureRmWebApp -ResourceGroupName $DestResourceGroupName -Name $DestWebAppName
 
 Start-Sleep -s 5
+
+Write-Host "Deleting Files in $DestKuduDelPath"
+
+Invoke-RestMethod -Uri $DestKuduDelPath -Headers @{"Authorization"=$DestKuduApiAuthorisationToken;"If-Match"="*"} -Method DELETE
 
 Write-Host "Uploading File"
 
