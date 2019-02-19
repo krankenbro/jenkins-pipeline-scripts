@@ -42,11 +42,13 @@ Write-Host "Stop WebApp"
 
 Stop-AzureRmWebApp -ResourceGroupName $DestResourceGroupName -Name $DestWebAppName
 
-Start-Sleep -s 5
+Start-Sleep -s 10
 
 Write-Host "Deleting Files in $DestKuduDelPath"
 
 Invoke-RestMethod -Uri $DestKuduDelPath -Headers @{"Authorization"=$DestKuduApiAuthorisationToken;"If-Match"="*"} -Method DELETE
+
+Start-Sleep -s 10
 
 Write-Host "Uploading File"
 
